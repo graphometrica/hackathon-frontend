@@ -80,6 +80,13 @@ const openModal = async (inn) => {
 const main = async () => {
 
  let source = await fetch('https://hackathon.graphometrica.ai/api/getAll').then(r => r.json());
+
+ source = source.filter(i=>i.location).map(i=> {
+  let location = i.location;
+  
+  if (location.indexOf(', ') >= 0) location = location.split(', ')[0]
+  return {...i, location: location}
+})
   
   let preds = [...new Set(source.map(i=>i.preds))]
   let k = 0;//Quartile(preds, 0.3);
