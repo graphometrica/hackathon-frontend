@@ -251,4 +251,7 @@ source = filterByScore(source);
     }        
 };
 
-$(document).ready(main);
+$(document).ready(() => {
+  setTimeout(main, 2500);
+  
+});
