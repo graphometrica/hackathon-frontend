@@ -33,7 +33,7 @@ body {
 }
 
 
-a.my-primary-btn:hover, a.my-primary-btn:visited {
+a.my-primary-btn:hover, a.my-primary-btn:visited, a.my-primary-btn:active {
     background-color: #462c7d;
     color: #ffed00;
     text-decoration: none;

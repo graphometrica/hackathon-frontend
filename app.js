@@ -262,10 +262,68 @@
         return '';
     }
 
+    const writeEmplNumber = (item) => {
+      if (!item.employee_number) return '';
+      return `<br/>· Кол-во сотрудников: ${encodeURIComponent(item.employee_number)}`;
+    }
+
+    const writeProceed = (item) => {
+      if (!item.proceed) return '';
+      return `<br/>· Выручка за последний год: ${encodeURIComponent(item.proceed)} тыс. руб.`;
+    }
+
+    const normalizeUrl = (url) => {
+      if (url.indexOf('http') !== 0) {
+        return `https://${url}`
+      }
+      return url;
+    }
+
+    const writeSocnetworks = (item) => {
+  
+      if (!item.soc_networks) return '';
+
+      let result = '<br/><div style="margin-top:10px">';
+
+      let parts = item.soc_networks.split(', ').map(i=>i.trim()).filter(i=>i);
+
+      
+
+      parts.forEach(i=> {
+        if (i.indexOf('vk.ru') >=0 || i.indexOf('vk.com') >=0 || i.indexOf('http://vkontakte.ru') >=0) {
+          result = result +`<div style="float:left;height:24px;width:24px; margin-left: 10px;">
+          <a href='${normalizeUrl(i)}' target='_blank'><img src='pics/vk.svg'></a></div>`;
+        }else if (i.indexOf('fb.com') >=0 || i.indexOf('facebook.com') >=0 ) {
+          result = result +`<div style="float:left;height:24px;width:24px; margin-left: 10px;">
+          <a href='${normalizeUrl(i)}' target='_blank'><img src='pics/facebook.svg'></a></div>`;
+        }else if (i.indexOf('instagram.com') >=0 ) {
+          result = result +`<div style="float:left;height:24px;width:24px; margin-left: 10px;">
+          <a href='${normalizeUrl(i)}' target='_blank'><img src='pics/instagram.svg'></a></div>`;
+        }else if (i.indexOf('twitter') >=0 ) {
+          result = result +`<div style="float:left;height:24px;width:24px; margin-left: 10px;">
+          <a href='${normalizeUrl(i)}' target='_blank'><img src='pics/twitter.svg'></a></div>`;
+        }
+      })
+
+      result = result +'</div>'
+      return result;
+      
+      
+
+      
+
+      result = result +`<div style="float:left;height:24px;width:24px; margin-left: 10px;">
+      <a href='' target='_blank'><img src='pics/facebook.svg'></a></div>`;
+
+      result = result +`<div style="float:left;height:24px;width:24px; margin-left: 10px;">
+      <a href='' target='_blank'><img src='pics/twitter.svg'></a></div>`;
+
+      
+    }
+
     const addMarker = (item, colorFn, scale) => {
       let geo = getPos(item.location);
-      
-      
+            
       let color = colorFn(item.preds);
 
       let level = getCompetitionLevel(item);
@@ -277,16 +335,17 @@
             balloonContentBody: `
             <b>${item.okved_name.length > 128 ? item.okved_name.substr(0,128) + '...' : item.okved_name }</b> 
             <br/><span >· организаций с таким же ОКВЭД в радиусе 15 км: ${getCompetitionLevelLabel(level)}</span>
-            <br/>
-            <br/>· Рубрика: ${item.rubric}
-            <br/>· Подрубрика: ${item.sub_rubric}            
+            <br/>            
             <br/>· ИНН: ${item.inn}
             <br/>· ОГРН: ${item.ogrn}
             <br/>· ОКВЭД: ${item.okved_code}
+            ${writeEmplNumber(item)}
+            ${writeProceed(item)}
             <br/>
                         
             <br/>· адрес: ${item.city? item.city+ ', ' : ''} ${item.address}            
             ${writeLinks(item)}
+            ${writeSocnetworks(item)}
             <br/><br/>
             <svg width="16" height="16">
               <rect width="16" height="16" style="fill:${color};" />
